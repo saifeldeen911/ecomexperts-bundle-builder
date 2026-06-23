@@ -11,6 +11,10 @@ npm run dev
 
 Open [http://localhost:5173](http://localhost:5173) in your browser.
 
+## Live Preview
+
+[https://ecomexperts-bundle-builder.vercel.app/](https://ecomexperts-bundle-builder.vercel.app/)
+
 ### Build for production
 
 ```bash
