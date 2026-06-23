@@ -3,16 +3,18 @@ import type { ProductVariant, SelectionId } from '../types'
 interface VariantSelectorProps {
   variants: ProductVariant[]
   activeVariantId: SelectionId
+  productName: string
   onSelect?: (variantId: SelectionId) => void
 }
 
 export function VariantSelector({
   variants,
   activeVariantId,
+  productName,
   onSelect,
 }: VariantSelectorProps) {
   return (
-    <div className="variant-selector" aria-label="Choose color">
+    <div className="variant-selector" aria-label={`Choose ${productName} color`}>
       {variants.map((variant) => {
         const isActive = variant.id === activeVariantId
         const isGrey = variant.label.toLowerCase() === 'grey'
@@ -24,6 +26,7 @@ export function VariantSelector({
             key={variant.id}
             className="variant-selector__option"
             data-variant={variant.id}
+            aria-label={`Select ${variant.label} for ${productName}`}
             aria-pressed={isActive}
             disabled={onSelect === undefined}
             onClick={() => onSelect?.(variant.id)}

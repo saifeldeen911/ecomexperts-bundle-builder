@@ -90,6 +90,7 @@ export function ProductCard({
           <VariantSelector
             variants={product.variants ?? []}
             activeVariantId={visibleSelectionId}
+            productName={product.name}
             onSelect={
               onSelectVariant === undefined
                 ? undefined

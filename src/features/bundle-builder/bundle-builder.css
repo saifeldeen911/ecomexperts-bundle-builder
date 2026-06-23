@@ -44,6 +44,16 @@
   background: transparent;
   padding: 0;
   text-align: left;
+  transition: color 0.18s ease, transform 0.18s ease;
+}
+
+.accordion-step__header:hover .accordion-step__title strong,
+.accordion-step__header:hover .accordion-step__status {
+  color: var(--color-accent);
+}
+
+.accordion-step__header:active {
+  transform: translateY(1px);
 }
 
 .accordion-step__frame {
@@ -186,6 +196,19 @@
   font-weight: 600;
   line-height: 24px;
   white-space: nowrap;
+  transition: background-color 0.18s ease, color 0.18s ease,
+    transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.accordion-step__next:hover {
+  background: var(--color-accent);
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgb(78 47 210 / 18%);
+}
+
+.accordion-step__next:active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 10px rgb(78 47 210 / 16%);
 }
 
 .product-card {
@@ -198,6 +221,13 @@
   padding: 11px;
   overflow: hidden;
   box-sizing: border-box;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+.product-card:hover {
+  border-color: color-mix(in srgb, var(--color-accent) 28%, transparent);
+  box-shadow: 0 10px 24px rgb(31 31 31 / 8%);
 }
 
 .product-card[data-selected='true'] {
@@ -329,6 +359,17 @@
   opacity: 1;
   box-sizing: border-box;
   overflow: visible;
+  transition: border-color 0.18s ease, background-color 0.18s ease,
+    color 0.18s ease, transform 0.18s ease;
+}
+
+.variant-selector__option:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.variant-selector__option:active {
+  transform: translateY(1px);
 }
 
 .variant-selector__option[data-variant="white"] {
@@ -387,6 +428,19 @@
   color: var(--color-title);
   box-sizing: border-box;
   padding: 0;
+  transition: background-color 0.16s ease, border-color 0.16s ease,
+    transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.quantity-stepper button:not(:disabled):hover {
+  background: #ffffff;
+  border-color: color-mix(in srgb, var(--color-accent) 28%, var(--color-stepper-border));
+  box-shadow: 0 4px 10px rgb(31 31 31 / 8%);
+}
+
+.quantity-stepper button:not(:disabled):active {
+  transform: scale(0.92);
+  box-shadow: none;
 }
 
 .quantity-stepper button svg {
@@ -813,6 +867,18 @@
   font-size: 17px;
   line-height: 22px;
   font-weight: 700;
+  transition: background-color 0.18s ease, transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.review-panel__checkout:hover {
+  background: #3f24bf;
+  box-shadow: 0 10px 22px rgb(78 47 210 / 22%);
+}
+
+.review-panel__checkout:active {
+  transform: translateY(1px);
+  box-shadow: 0 5px 12px rgb(78 47 210 / 18%);
 }
 
 .review-panel__save {
@@ -825,6 +891,37 @@
   letter-spacing: -0.016px;
   font-style: italic;
   text-decoration: underline;
+  transition: color 0.18s ease, transform 0.18s ease;
+}
+
+.review-panel__save:hover,
+.review-panel__save[data-saved='true'] {
+  color: var(--color-savings);
+}
+
+.review-panel__save:active {
+  transform: translateY(1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .accordion-step__header,
+  .accordion-step__next,
+  .product-card,
+  .variant-selector__option,
+  .quantity-stepper button,
+  .review-panel__checkout,
+  .review-panel__save {
+    transition: none;
+  }
+
+  .accordion-step__header:active,
+  .accordion-step__next:active,
+  .variant-selector__option:active,
+  .quantity-stepper button:not(:disabled):active,
+  .review-panel__checkout:active,
+  .review-panel__save:active {
+    transform: none;
+  }
 }
 
 @media (max-width: 1439px) {
@@ -1167,6 +1264,53 @@
 
   .review-panel__save {
     margin-top: 2px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1199px) {
+  .bundle-builder {
+    width: 100%;
+    max-width: 1213px;
+    padding-inline: 20px;
+  }
+
+  .accordion-step__products {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  }
+
+  .accordion-step__products > :nth-child(5),
+  .product-card {
+    width: 100%;
+  }
+
+  .product-card__details,
+  .product-card[data-product-id='wyze-battery-cam-pro'] .product-card__details {
+    width: 100%;
+  }
+
+  .review-panel {
+    height: auto;
+    min-height: 0;
+  }
+
+  .review-panel__body {
+    flex-direction: column;
+    align-items: stretch;
+    height: auto;
+    gap: 32px;
+  }
+
+  .review-panel__list,
+  .review-panel__actions,
+  .review-panel__intro,
+  .review-panel__shipping {
+    width: 100%;
+  }
+
+  .review-panel__list,
+  .review-panel__actions {
+    flex: initial;
   }
 }
 

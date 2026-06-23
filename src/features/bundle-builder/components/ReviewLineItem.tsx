@@ -18,6 +18,9 @@ export function ReviewLineItem({
   onDecrementQuantity,
 }: ReviewLineItemProps) {
   const showQuantityStepper = line.category !== 'plan'
+  const stepperLabel = `${line.name}${
+    line.variantLabel === undefined ? '' : ` ${line.variantLabel}`
+  } quantity`
   const compareAtPrice = formatCompareAtPrice(line.pricing)
   const activeTotalCents = line.pricing.activeCents * line.quantity
   const activePrice =
@@ -57,7 +60,7 @@ export function ReviewLineItem({
       {showQuantityStepper && (
         <QuantityStepper
           value={line.quantity}
-          label={`${line.name} quantity`}
+          label={stepperLabel}
           onIncrement={
             onIncrementQuantity === undefined
               ? undefined

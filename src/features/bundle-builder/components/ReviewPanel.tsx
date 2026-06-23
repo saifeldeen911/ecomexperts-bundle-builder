@@ -18,6 +18,7 @@ interface ReviewPanelProps {
   onIncrementQuantity?: (target: BundleSelectionTarget) => void
   onDecrementQuantity?: (target: BundleSelectionTarget) => void
   onSaveConfiguration?: () => void
+  isSaveConfirmed?: boolean
 }
 
 const reviewCategoryLabels: Record<ReviewCategory, string> = {
@@ -41,6 +42,7 @@ export function ReviewPanel({
   onIncrementQuantity,
   onDecrementQuantity,
   onSaveConfiguration,
+  isSaveConfirmed = false,
 }: ReviewPanelProps) {
   const handleCheckout = () => {
     window.alert('Checkout is a prototype placeholder.')
@@ -139,8 +141,10 @@ export function ReviewPanel({
             className="review-panel__save"
             type="button"
             onClick={onSaveConfiguration}
+            data-saved={isSaveConfirmed}
+            aria-live="polite"
           >
-            Save my system for later
+            {isSaveConfirmed ? 'Saved! Your system is ready for later' : 'Save my system for later'}
           </button>
         </div>
       </div>

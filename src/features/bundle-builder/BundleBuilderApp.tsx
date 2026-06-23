@@ -1,4 +1,4 @@
-import { useReducer } from 'react'
+import { useEffect, useReducer, useState } from 'react'
 import {
   bundleCatalog,
   initialActiveVariantByProduct,
@@ -54,6 +54,7 @@ export function BundleBuilderApp() {
     initialStateInput,
     createHydratedInitialState,
   )
+  const [saveConfirmationToken, setSaveConfirmationToken] = useState(0)
   const reviewLines = deriveReviewLines(bundleCatalog, state.quantities)
   const totals = calculateBundleTotals(
     reviewLines,
@@ -80,7 +81,20 @@ export function BundleBuilderApp() {
   }
   const handleSaveConfiguration = () => {
     saveBundleBuilderState(state)
+    setSaveConfirmationToken((token) => token + 1)
   }
+
+  useEffect(() => {
+    if (saveConfirmationToken === 0) {
+      return undefined
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setSaveConfirmationToken(0)
+    }, 2200)
+
+    return () => window.clearTimeout(timeoutId)
+  }, [saveConfirmationToken])
 
   return (
     <main className="bundle-builder" aria-label="Bundle builder">
@@ -120,6 +134,7 @@ export function BundleBuilderApp() {
         onIncrementQuantity={handleIncrementQuantity}
         onDecrementQuantity={handleDecrementQuantity}
         onSaveConfiguration={handleSaveConfiguration}
+        isSaveConfirmed={saveConfirmationToken > 0}
       />
     </main>
   )
