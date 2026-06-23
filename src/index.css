@@ -1,0 +1,101 @@
+@font-face {
+  font-family: 'Gilroy';
+  src: url('./assets/fonts/gilroy-regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gilroy';
+  src: url('./assets/fonts/gilroy-medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gilroy';
+  src: url('./assets/fonts/gilroy-semibold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gilroy';
+  src: url('./assets/fonts/gilroy-bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gilroy';
+  src: url('./assets/fonts/gilroy-regular-italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'TT Norms Pro';
+  src: url('./assets/fonts/tt-norms-pro-bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --color-page: #ffffff;
+  --color-panel: #edf4ff;
+  --color-text-primary: #0b0d10;
+  --color-title: #1f1f1f;
+  --color-review-label: #484848;
+  --color-muted: #6f7882;
+  --color-category: #a8b2bd;
+  --color-divider: #ced6de;
+  --color-accent: #4e2fd2;
+  --color-savings: #0aa288;
+  --color-stepper-border: #e6ebf0;
+  --color-stepper-fill: #f0f4f7;
+  --color-chip-border: #cccccc;
+  --color-shipping: #0aa288;
+  --font-sans: 'Gilroy', 'Avenir Next', 'Helvetica Neue', Arial, sans-serif;
+  --font-button: 'TT Norms Pro', 'Gilroy', 'Avenir Next', 'Helvetica Neue', Arial,
+    sans-serif;
+
+  color: var(--color-text-primary);
+  background: var(--color-page);
+  font-family: var(--font-sans);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+button,
+a {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}

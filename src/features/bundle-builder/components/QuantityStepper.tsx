@@ -1,0 +1,42 @@
+interface QuantityStepperProps {
+  value: number
+  label: string
+  onDecrement?: () => void
+  onIncrement?: () => void
+}
+
+export function QuantityStepper({
+  value,
+  label,
+  onDecrement,
+  onIncrement,
+}: QuantityStepperProps) {
+  const canDecrement = value > 0 && onDecrement !== undefined
+  const canIncrement = onIncrement !== undefined
+
+  return (
+    <div className="quantity-stepper" aria-label={label}>
+      <button
+        type="button"
+        aria-label={`Decrease ${label}`}
+        disabled={!canDecrement}
+        onClick={onDecrement}
+      >
+        <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M7.33333 4.66667H0.666667C0.489856 4.66667 0.320286 4.59643 0.195262 4.4714C0.0702379 4.34638 0 4.17681 0 4C0 3.82319 0.0702379 3.65362 0.195262 3.5286C0.320286 3.40357 0.489856 3.33333 0.666667 3.33333H7.33333C7.51014 3.33333 7.67971 3.40357 7.80474 3.5286C7.92976 3.65362 8 3.82319 8 4C8 4.17681 7.92976 4.34638 7.80474 4.4714C7.67971 4.59643 7.51014 4.66667 7.33333 4.66667Z" fill="currentColor"/>
+        </svg>
+      </button>
+      <span aria-live="polite">{value}</span>
+      <button
+        type="button"
+        aria-label={`Increase ${label}`}
+        disabled={!canIncrement}
+        onClick={onIncrement}
+      >
+        <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M7.33333 3.33333H4.66667V0.666667C4.66667 0.489856 4.59643 0.320286 4.4714 0.195262C4.34638 0.0702379 4.17681 0 4 0C3.82319 0 3.65362 0.0702379 3.5286 0.195262C3.40357 0.320286 3.33333 0.489856 3.33333 0.666667V3.33333H0.666667C0.489856 3.33333 0.320286 3.40357 0.195262 3.5286C0.0702379 3.65362 0 3.82319 0 4C0 4.17681 0.0702379 4.34638 0.195262 4.4714C0.320286 4.59643 0.489856 4.66667 0.666667 4.66667H3.33333V7.33333C3.33333 7.51014 3.40357 7.67971 3.5286 7.80474C3.65362 7.92976 3.82319 8 4 8C4.17681 8 4.34638 7.92976 4.4714 7.80474C4.59643 7.67971 4.66667 7.51014 4.66667 7.33333V4.66667H7.33333C7.51014 4.66667 7.67971 4.59643 7.80474 4.4714C7.92976 4.34638 8 4.17681 8 4C8 3.82319 7.92976 3.65362 7.80474 3.5286C7.67971 3.40357 7.51014 3.33333 7.33333 3.33333Z" fill="currentColor"/>
+        </svg>
+      </button>
+    </div>
+  )
+}
