@@ -99,7 +99,8 @@ const clampQuantityForProduct = (
 
   const integerQuantity = Math.max(0, Math.trunc(quantity))
 
-  return isSingleSelectProduct(product) && integerQuantity > 0
+  return (isSingleSelectProduct(product) || product.isRequired === true) &&
+    integerQuantity > 0
     ? 1
     : integerQuantity
 }
@@ -158,6 +159,51 @@ const enforceSingleSelectProducts = (
   return normalized
 }
 
+const enforceRequiredProducts = (
+  catalog: BundleCatalog,
+  quantities: BundleQuantities,
+  fallback?: BundleQuantities,
+): BundleQuantities => {
+  const normalized = cloneQuantities(quantities)
+
+  catalog.products.forEach((product) => {
+    if (product.isRequired !== true) {
+      return
+    }
+
+    const currentSelections = normalized[product.id]
+
+    if (
+      currentSelections !== undefined &&
+      Object.values(currentSelections).some((quantity) => quantity > 0)
+    ) {
+      return
+    }
+
+    const fallbackSelectionId = getFirstSelectionId(fallback?.[product.id])
+    const selectionId =
+      fallbackSelectionId !== undefined &&
+      getValidSelectionIds(catalog, product.id).has(fallbackSelectionId)
+        ? fallbackSelectionId
+        : product.defaultSelectionId
+
+    normalized[product.id] = { [selectionId]: 1 }
+  })
+
+  return normalized
+}
+
+const enforceQuantityRules = (
+  catalog: BundleCatalog,
+  quantities: BundleQuantities,
+  fallback?: BundleQuantities,
+) =>
+  enforceRequiredProducts(
+    catalog,
+    enforceSingleSelectProducts(catalog, quantities, fallback),
+    fallback,
+  )
+
 const isValidSectionId = (
   catalog: BundleCatalog,
   sectionId: unknown,
@@ -194,7 +240,7 @@ const normalizeQuantities = (
   fallback?: BundleQuantities,
 ): BundleQuantities => {
   if (!isRecord(quantities)) {
-    return enforceSingleSelectProducts(catalog, {}, fallback)
+    return enforceQuantityRules(catalog, {}, fallback)
   }
 
   const normalized: BundleQuantities = {}
@@ -227,7 +273,7 @@ const normalizeQuantities = (
     }
   })
 
-  return enforceSingleSelectProducts(catalog, normalized, fallback)
+  return enforceQuantityRules(catalog, normalized, fallback)
 }
 
 const normalizeSavedState = (
@@ -288,7 +334,10 @@ const setSelectionQuantity = (
     quantity,
   )
 
-  if (isSingleSelectProduct(product) && nextQuantity === 0) {
+  if (
+    (isSingleSelectProduct(product) || product.isRequired === true) &&
+    nextQuantity === 0
+  ) {
     return quantities
   }
 
@@ -349,13 +398,13 @@ export const loadSavedBundleBuilderState = (
     return undefined
   }
 
-  const savedValue = window.localStorage.getItem(STORAGE_KEY)
-
-  if (savedValue === null) {
-    return undefined
-  }
-
   try {
+    const savedValue = window.localStorage.getItem(STORAGE_KEY)
+
+    if (savedValue === null) {
+      return undefined
+    }
+
     return normalizeSavedState(catalog, JSON.parse(savedValue), fallback)
   } catch {
     return undefined
@@ -364,7 +413,7 @@ export const loadSavedBundleBuilderState = (
 
 export const saveBundleBuilderState = (state: BundleBuilderState) => {
   if (typeof window === 'undefined') {
-    return
+    return false
   }
 
   const savedState: SavedBundleBuilderState = {
@@ -372,7 +421,13 @@ export const saveBundleBuilderState = (state: BundleBuilderState) => {
     state,
   }
 
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(savedState))
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(savedState))
+
+    return true
+  } catch {
+    return false
+  }
 }
 
 export const createBundleBuilderReducer = (catalog: BundleCatalog) => {
@@ -437,7 +492,14 @@ export const createBundleBuilderReducer = (catalog: BundleCatalog) => {
         }
 
       case 'restore_configuration':
-        return cloneState(action.state)
+        return {
+          ...cloneState(action.state),
+          quantities: normalizeQuantities(
+            catalog,
+            action.state.quantities,
+            state.quantities,
+          ),
+        }
 
       default:
         throw new Error('Unknown bundle builder action')

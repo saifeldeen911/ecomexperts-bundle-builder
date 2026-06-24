@@ -18,7 +18,7 @@ interface ReviewPanelProps {
   onIncrementQuantity?: (target: BundleSelectionTarget) => void
   onDecrementQuantity?: (target: BundleSelectionTarget) => void
   onSaveConfiguration?: () => void
-  isSaveConfirmed?: boolean
+  saveStatus?: 'idle' | 'saved' | 'failed'
 }
 
 const reviewCategoryLabels: Record<ReviewCategory, string> = {
@@ -42,11 +42,17 @@ export function ReviewPanel({
   onIncrementQuantity,
   onDecrementQuantity,
   onSaveConfiguration,
-  isSaveConfirmed = false,
+  saveStatus = 'idle',
 }: ReviewPanelProps) {
   const handleCheckout = () => {
     window.alert('Checkout is a prototype placeholder.')
   }
+  const saveButtonLabel =
+    saveStatus === 'saved'
+      ? 'Saved! Your system is ready for later'
+      : saveStatus === 'failed'
+        ? 'Save failed. Try again'
+        : 'Save my system for later'
 
   return (
     <aside className="review-panel" aria-labelledby="review-panel-title">
@@ -141,10 +147,10 @@ export function ReviewPanel({
             className="review-panel__save"
             type="button"
             onClick={onSaveConfiguration}
-            data-saved={isSaveConfirmed}
+            data-save-status={saveStatus}
             aria-live="polite"
           >
-            {isSaveConfirmed ? 'Saved! Your system is ready for later' : 'Save my system for later'}
+            {saveButtonLabel}
           </button>
         </div>
       </div>

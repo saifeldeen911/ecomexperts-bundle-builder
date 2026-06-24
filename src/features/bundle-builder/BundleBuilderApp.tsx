@@ -33,6 +33,8 @@ const initialStateInput: BundleBuilderInitialStateInput = {
 
 const bundleBuilderReducer = createBundleBuilderReducer(bundleCatalog)
 
+type SaveConfigurationStatus = 'idle' | 'saved' | 'failed'
+
 const createHydratedInitialState = (input: BundleBuilderInitialStateInput) => {
   const fallbackState = createInitialBundleBuilderState(input)
 
@@ -56,7 +58,8 @@ export function BundleBuilderApp() {
     initialStateInput,
     createHydratedInitialState,
   )
-  const [saveConfirmationToken, setSaveConfirmationToken] = useState(0)
+  const [saveStatus, setSaveStatus] =
+    useState<SaveConfigurationStatus>('idle')
   const reviewLines = deriveReviewLines(bundleCatalog, state.quantities)
   const totals = calculateBundleTotals(
     reviewLines,
@@ -82,21 +85,20 @@ export function BundleBuilderApp() {
     dispatch({ type: 'decrement_quantity', target })
   }
   const handleSaveConfiguration = () => {
-    saveBundleBuilderState(state)
-    setSaveConfirmationToken((token) => token + 1)
+    setSaveStatus(saveBundleBuilderState(state) ? 'saved' : 'failed')
   }
 
   useEffect(() => {
-    if (saveConfirmationToken === 0) {
+    if (saveStatus === 'idle') {
       return undefined
     }
 
     const timeoutId = window.setTimeout(() => {
-      setSaveConfirmationToken(0)
+      setSaveStatus('idle')
     }, 2200)
 
     return () => window.clearTimeout(timeoutId)
-  }, [saveConfirmationToken])
+  }, [saveStatus])
 
   return (
     <main className="bundle-builder" aria-label="Bundle builder">
@@ -136,7 +138,7 @@ export function BundleBuilderApp() {
         onIncrementQuantity={handleIncrementQuantity}
         onDecrementQuantity={handleDecrementQuantity}
         onSaveConfiguration={handleSaveConfiguration}
-        isSaveConfirmed={saveConfirmationToken > 0}
+        saveStatus={saveStatus}
       />
     </main>
   )

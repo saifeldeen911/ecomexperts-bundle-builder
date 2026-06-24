@@ -912,8 +912,12 @@
   transition: color 0.18s ease, transform 0.18s ease;
 }
 
-.review-panel__save[data-saved='true'] {
+.review-panel__save[data-save-status='saved'] {
   color: var(--color-savings);
+}
+
+.review-panel__save[data-save-status='failed'] {
+  color: #d8392b;
 }
 
 .review-panel__save:active {

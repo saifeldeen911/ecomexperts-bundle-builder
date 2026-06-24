@@ -80,6 +80,7 @@ export function ReviewLineItem({
                   })
           }
           min={line.isRequired ? 1 : 0}
+          isDisabled={line.isRequired === true}
         />
       )}
 

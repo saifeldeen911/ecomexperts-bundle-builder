@@ -124,6 +124,7 @@ export function ProductCard({
                   : () => onDecrementQuantity(selectionTarget)
               }
               min={product.isRequired ? 1 : 0}
+              isDisabled={product.isRequired === true}
             />
           )}
           <div className="product-card__price">
