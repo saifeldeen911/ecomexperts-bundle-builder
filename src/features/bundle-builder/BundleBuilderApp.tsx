@@ -11,7 +11,7 @@ import {
   getStepProductViews,
 } from './lib/bundleCalculations'
 import {
-  bundleBuilderReducer,
+  createBundleBuilderReducer,
   createInitialBundleBuilderState,
   loadSavedBundleBuilderState,
   saveBundleBuilderState,
@@ -30,6 +30,8 @@ const initialStateInput: BundleBuilderInitialStateInput = {
   quantities: initialBundleQuantities,
   activeVariantByProduct: initialActiveVariantByProduct,
 }
+
+const bundleBuilderReducer = createBundleBuilderReducer(bundleCatalog)
 
 const createHydratedInitialState = (input: BundleBuilderInitialStateInput) => {
   const fallbackState = createInitialBundleBuilderState(input)

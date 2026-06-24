@@ -2,6 +2,7 @@ import {
   formatCompareAtPrice,
   formatPrice,
 } from '../lib/bundleCalculations'
+import { isQuantityEditableProduct } from '../lib/bundleProductRules'
 import type {
   BundleProduct,
   BundleSelectionTarget,
@@ -31,6 +32,7 @@ export function ProductCard({
 }: ProductCardProps) {
   const compareAtPrice = formatCompareAtPrice(product.pricing)
   const hasVariants = product.variants !== undefined && product.variants.length > 0
+  const isQuantityEditable = isQuantityEditableProduct(product)
   const visibleSelectionId = hasVariants
     ? activeSelectionId
     : product.defaultSelectionId
@@ -103,22 +105,27 @@ export function ProductCard({
           />
         )}
 
-        <div className="product-card__footer">
-          <QuantityStepper
-            value={quantity}
-            label={`${product.name} quantity`}
-            onIncrement={
-              onIncrementQuantity === undefined
-                ? undefined
-                : () => onIncrementQuantity(selectionTarget)
-            }
-            onDecrement={
-              onDecrementQuantity === undefined
-                ? undefined
-                : () => onDecrementQuantity(selectionTarget)
-            }
-            min={product.isRequired ? 1 : 0}
-          />
+        <div
+          className="product-card__footer"
+          data-quantity-editable={isQuantityEditable}
+        >
+          {isQuantityEditable && (
+            <QuantityStepper
+              value={quantity}
+              label={`${product.name} quantity`}
+              onIncrement={
+                onIncrementQuantity === undefined
+                  ? undefined
+                  : () => onIncrementQuantity(selectionTarget)
+              }
+              onDecrement={
+                onDecrementQuantity === undefined
+                  ? undefined
+                  : () => onDecrementQuantity(selectionTarget)
+              }
+              min={product.isRequired ? 1 : 0}
+            />
+          )}
           <div className="product-card__price">
             {compareAtPrice !== undefined && <s>{compareAtPrice}</s>}
             <strong>{formatPrice(product.pricing)}</strong>

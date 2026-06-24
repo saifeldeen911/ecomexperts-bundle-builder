@@ -1,16 +1,28 @@
 import type {
+  ActiveVariantByProduct,
   BundleCatalog,
   BundleProduct,
   BundleQuantities,
   BundleSectionId,
   BundleTotals,
-  ActiveVariantByProduct,
   ProductPricing,
   ReviewLine,
   SelectionId,
   ShippingLine,
   StepProductView,
 } from '../types'
+import { isSingleSelectProduct } from './bundleProductRules'
+
+const normalizeSelectionQuantity = (
+  product: BundleProduct,
+  quantity: number,
+) => {
+  if (!Number.isFinite(quantity) || quantity <= 0) {
+    return 0
+  }
+
+  return isSingleSelectProduct(product) ? 1 : quantity
+}
 
 const getProductSelectionEntries = (
   product: BundleProduct,
@@ -18,7 +30,12 @@ const getProductSelectionEntries = (
 ) => {
   const selections = quantities[product.id] ?? {}
 
-  return Object.entries(selections).filter(([, quantity]) => quantity > 0)
+  return Object.entries(selections)
+    .map(
+      ([selectionId, quantity]) =>
+        [selectionId, normalizeSelectionQuantity(product, quantity)] as const,
+    )
+    .filter(([, quantity]) => quantity > 0)
 }
 
 export const getProductQuantityTotal = (
@@ -34,7 +51,8 @@ export const getSelectionQuantity = (
   product: BundleProduct,
   selectionId: SelectionId,
   quantities: BundleQuantities,
-) => quantities[product.id]?.[selectionId] ?? 0
+) =>
+  normalizeSelectionQuantity(product, quantities[product.id]?.[selectionId] ?? 0)
 
 export const getStepProductViews = (
   catalog: BundleCatalog,

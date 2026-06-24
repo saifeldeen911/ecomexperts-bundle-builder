@@ -260,6 +260,47 @@
   background: transparent;
 }
 
+.product-card[data-product-id='cam-unlimited'] {
+  align-items: center;
+}
+
+.accordion-step__products > .product-card[data-product-id='cam-unlimited'] {
+  justify-self: center;
+  width: 360px;
+  height: 76px;
+  min-height: 76px;
+}
+
+.product-card[data-product-id='cam-unlimited'] .product-card__media {
+  flex: 0 0 41px;
+}
+
+.product-card[data-product-id='cam-unlimited'] .product-card__details {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.product-card[data-product-id='cam-unlimited'] .product-card__content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.product-card[data-product-id='cam-unlimited'] .product-card__content h3 {
+  white-space: nowrap;
+}
+
+.product-card[data-product-id='cam-unlimited'] .product-card__footer {
+  flex: 0 0 auto;
+  width: auto;
+  margin-top: 0;
+}
+
+.product-card[data-product-id='cam-unlimited'] .product-card__price {
+  min-width: 86px;
+}
+
 .product-card__media img,
 .review-line__media img {
   display: block;
@@ -388,6 +429,10 @@
   justify-content: space-between;
   align-items: center;
   gap: 10px;
+}
+
+.product-card__footer[data-quantity-editable='false'] {
+  justify-content: flex-end;
 }
 
 .quantity-stepper {
@@ -1103,6 +1148,39 @@
     height: 28px;
   }
 
+  .product-card[data-product-id='cam-unlimited'] {
+    flex-direction: row;
+    justify-content: flex-start;
+    width: min(100%, 360px);
+    min-height: 72px;
+    height: auto;
+    padding: 11px 14px;
+  }
+
+  .product-card[data-product-id='cam-unlimited'] .product-card__media {
+    width: 41px !important;
+    height: 41px !important;
+    flex: 0 0 41px;
+  }
+
+  .product-card[data-product-id='cam-unlimited'] .product-card__details {
+    flex: 1 1 auto;
+    width: auto;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .product-card[data-product-id='cam-unlimited'] .product-card__footer {
+    width: auto;
+    height: auto;
+  }
+
+  .product-card[data-product-id='cam-unlimited'] .product-card__price {
+    min-width: 90px;
+  }
+
   .review-panel {
     width: 100%;
     min-height: 658px;
@@ -1295,6 +1373,10 @@
   .product-card__details,
   .product-card[data-product-id='wyze-battery-cam-pro'] .product-card__details {
     width: 100%;
+  }
+
+  .product-card[data-product-id='cam-unlimited'] .product-card__details {
+    width: auto;
   }
 
   .review-panel {
@@ -1549,6 +1631,34 @@
   .product-card__price strong,
   .product-card__price s {
     font-size: 14px;
+  }
+
+  .product-card[data-product-id='cam-unlimited'] {
+    align-items: center;
+    width: 100%;
+    min-height: 64px;
+    padding: 10px 12px;
+  }
+
+  .product-card[data-product-id='cam-unlimited'] .product-card__media {
+    width: 41px !important;
+    height: 41px !important;
+    flex: 0 0 41px;
+  }
+
+  .product-card[data-product-id='cam-unlimited'] .product-card__details {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .product-card[data-product-id='cam-unlimited'] .product-card__footer {
+    width: auto;
+  }
+
+  .product-card[data-product-id='cam-unlimited'] .product-card__price {
+    min-width: 74px;
   }
 
   /* Review Panel takes full width of the viewport */
