@@ -79,6 +79,7 @@ export function ReviewLineItem({
                     selectionId: line.selectionId,
                   })
           }
+          min={line.isRequired ? 1 : 0}
         />
       )}
 

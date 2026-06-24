@@ -203,7 +203,7 @@
 .product-card {
   display: flex;
   align-items: center;
-  gap: 13px;
+  gap: 19px;
   border-radius: 10px;
   border: 2px solid transparent;
   background: #ffffff;
@@ -216,6 +216,12 @@
 
 .product-card[data-selected='true'] {
   border: 2px solid color-mix(in srgb, var(--color-accent) 70%, transparent);
+}
+
+.product-card[data-product-id='wyze-cam-floodlight-v2'],
+.product-card[data-product-id='wyze-duo-cam-doorbell'],
+.product-card[data-product-id='wyze-battery-cam-pro'] {
+  gap: 13px;
 }
 
 .product-card__badge {

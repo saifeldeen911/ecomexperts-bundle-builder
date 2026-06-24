@@ -117,6 +117,7 @@ export function ProductCard({
                 ? undefined
                 : () => onDecrementQuantity(selectionTarget)
             }
+            min={product.isRequired ? 1 : 0}
           />
           <div className="product-card__price">
             {compareAtPrice !== undefined && <s>{compareAtPrice}</s>}

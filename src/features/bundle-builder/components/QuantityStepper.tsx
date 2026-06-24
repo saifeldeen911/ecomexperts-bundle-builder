@@ -3,6 +3,7 @@ interface QuantityStepperProps {
   label: string
   onDecrement?: () => void
   onIncrement?: () => void
+  min?: number
 }
 
 export function QuantityStepper({
@@ -10,8 +11,9 @@ export function QuantityStepper({
   label,
   onDecrement,
   onIncrement,
+  min = 0,
 }: QuantityStepperProps) {
-  const canDecrement = value > 0 && onDecrement !== undefined
+  const canDecrement = value > min && onDecrement !== undefined
   const canIncrement = onIncrement !== undefined
 
   return (

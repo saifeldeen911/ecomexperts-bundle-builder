@@ -104,10 +104,12 @@ export const deriveReviewLines = (
 ): ReviewLine[] =>
   catalog.products.flatMap((product) => {
     const selectedEntries = getProductSelectionEntries(product, quantities)
-    const shouldShowVariantLabel = selectedEntries.length > 1
 
     return selectedEntries.map(([selectionId, quantity]) => {
       const variant = product.variants?.find(({ id }) => id === selectionId)
+      const showLabel =
+        selectedEntries.length > 1 ||
+        selectionId !== product.defaultSelectionId
 
       return {
         id: `${product.id}:${selectionId}`,
@@ -115,7 +117,7 @@ export const deriveReviewLines = (
         selectionId,
         category: product.reviewCategory,
         name: product.name,
-        variantLabel: shouldShowVariantLabel ? variant?.label : undefined,
+        variantLabel: showLabel ? variant?.label : undefined,
         quantity,
         image: getReviewImage(product, selectionId),
         pricing: getReviewPricing(product),

@@ -1,4 +1,4 @@
-# Bundle Builder – Frontend Take-Home
+# Bundle Builder
 
 A multi-step bundle builder prototype with a live review panel, built with **React 19 + TypeScript + Vite**.
 
