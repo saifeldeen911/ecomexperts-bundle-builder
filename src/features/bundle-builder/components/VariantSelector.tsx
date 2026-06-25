@@ -4,7 +4,7 @@ interface VariantSelectorProps {
   variants: ProductVariant[]
   activeVariantId: SelectionId
   productName: string
-  onSelect?: (variantId: SelectionId) => void
+  onSelect: (variantId: SelectionId) => void
 }
 
 export function VariantSelector({
@@ -28,8 +28,7 @@ export function VariantSelector({
             data-variant={variant.id}
             aria-label={`Select ${variant.label} for ${productName}`}
             aria-pressed={isActive}
-            disabled={onSelect === undefined}
-            onClick={() => onSelect?.(variant.id)}
+            onClick={() => onSelect(variant.id)}
             style={{ width: buttonWidth }}
           >
             <span

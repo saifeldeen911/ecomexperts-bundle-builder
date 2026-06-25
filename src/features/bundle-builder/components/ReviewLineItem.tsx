@@ -8,8 +8,8 @@ import { QuantityStepper } from './QuantityStepper'
 
 interface ReviewLineItemProps {
   line: ReviewLine
-  onIncrementQuantity?: (target: BundleSelectionTarget) => void
-  onDecrementQuantity?: (target: BundleSelectionTarget) => void
+  onIncrementQuantity: (target: BundleSelectionTarget) => void
+  onDecrementQuantity: (target: BundleSelectionTarget) => void
 }
 
 export function ReviewLineItem({
@@ -61,23 +61,17 @@ export function ReviewLineItem({
         <QuantityStepper
           value={line.quantity}
           label={stepperLabel}
-          onIncrement={
-            onIncrementQuantity === undefined
-              ? undefined
-              : () =>
-                  onIncrementQuantity({
-                    productId: line.productId,
-                    selectionId: line.selectionId,
-                  })
+          onIncrement={() =>
+            onIncrementQuantity({
+              productId: line.productId,
+              selectionId: line.selectionId,
+            })
           }
-          onDecrement={
-            onDecrementQuantity === undefined
-              ? undefined
-              : () =>
-                  onDecrementQuantity({
-                    productId: line.productId,
-                    selectionId: line.selectionId,
-                  })
+          onDecrement={() =>
+            onDecrementQuantity({
+              productId: line.productId,
+              selectionId: line.selectionId,
+            })
           }
           min={line.isRequired ? 1 : 0}
           isDisabled={line.isRequired === true}

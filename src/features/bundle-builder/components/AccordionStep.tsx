@@ -1,4 +1,8 @@
-import { useRef, useEffect } from 'react'
+import {
+  useId,
+  useState,
+  type TransitionEvent,
+} from 'react'
 import iconChevronDown from '../../../assets/bundle/icon-chevron-down.svg'
 import type {
   BundleSection,
@@ -13,11 +17,16 @@ interface AccordionStepProps {
   isOpen: boolean
   selectedCount: number
   products: StepProductView[]
-  onOpen?: (sectionId: BundleSectionId) => void
-  onNext?: (sectionId: BundleSectionId) => void
-  onSelectVariant?: (target: BundleSelectionTarget) => void
-  onIncrementQuantity?: (target: BundleSelectionTarget) => void
-  onDecrementQuantity?: (target: BundleSelectionTarget) => void
+  onOpen: (sectionId: BundleSectionId) => void
+  onNext: (sectionId: BundleSectionId) => void
+  onSelectVariant: (target: BundleSelectionTarget) => void
+  onIncrementQuantity: (target: BundleSelectionTarget) => void
+  onDecrementQuantity: (target: BundleSelectionTarget) => void
+}
+
+interface CollapseOverflowState {
+  isOpen: boolean
+  isVisible: boolean
 }
 
 export function AccordionStep({
@@ -31,35 +40,59 @@ export function AccordionStep({
   onIncrementQuantity,
   onDecrementQuantity,
 }: AccordionStepProps) {
-  const contentRef = useRef<HTMLDivElement>(null)
+  const headerId = useId()
+  const collapseId = useId()
+  const [collapseOverflow, setCollapseOverflow] =
+    useState<CollapseOverflowState>(() => ({
+      isOpen,
+      isVisible: isOpen,
+    }))
 
-  useEffect(() => {
-    const el = contentRef.current
-    if (!el) return
+  // Keep overflow hidden during the accordion transition, then release it for shadows.
+  if (collapseOverflow.isOpen !== isOpen) {
+    setCollapseOverflow({
+      isOpen,
+      isVisible: false,
+    })
+  }
 
-    if (isOpen) {
-      // After transition ends, allow overflow so dropdowns/tooltips aren't clipped
-      const handleEnd = () => {
-        el.style.overflow = 'visible'
-      }
-      el.addEventListener('transitionend', handleEnd, { once: true })
-      el.style.overflow = 'hidden'
-      return () => el.removeEventListener('transitionend', handleEnd)
-    } else {
-      el.style.overflow = 'hidden'
+  const isOverflowVisible = isOpen && collapseOverflow.isVisible
+
+  const handleCollapseTransitionEnd = (
+    event: TransitionEvent<HTMLDivElement>,
+  ) => {
+    if (
+      event.currentTarget === event.target &&
+      event.propertyName === 'grid-template-rows' &&
+      isOpen
+    ) {
+      setCollapseOverflow((current) =>
+        current.isOpen === isOpen && current.isVisible
+          ? current
+          : {
+              isOpen,
+              isVisible: true,
+            },
+      )
     }
-  }, [isOpen])
+  }
 
   return (
-    <section className="accordion-step" data-open={isOpen}>
+    <section
+      className="accordion-step"
+      data-open={isOpen}
+      aria-labelledby={headerId}
+    >
       <div className="accordion-step__eyebrow">{section.eyebrow}</div>
 
       <div className="accordion-step__frame">
         <button
+          id={headerId}
           className="accordion-step__header"
           type="button"
           aria-expanded={isOpen}
-          onClick={onOpen === undefined ? undefined : () => onOpen(section.id)}
+          aria-controls={collapseId}
+          onClick={() => onOpen(section.id)}
         >
           <span className="accordion-step__title">
             <img src={section.iconSrc} alt="" aria-hidden="true" />
@@ -76,10 +109,13 @@ export function AccordionStep({
         </button>
 
         <div
+          id={collapseId}
           className="accordion-step__collapse"
-          ref={contentRef}
-          aria-hidden={!isOpen}
+          role="region"
+          aria-labelledby={headerId}
           inert={!isOpen}
+          data-overflow-visible={isOverflowVisible}
+          onTransitionEnd={handleCollapseTransitionEnd}
         >
           <div className="accordion-step__collapse-inner">
             <div className="accordion-step__products">
@@ -101,7 +137,7 @@ export function AccordionStep({
               <button
                 className="accordion-step__next"
                 type="button"
-                onClick={onNext === undefined ? undefined : () => onNext(section.id)}
+                onClick={() => onNext(section.id)}
               >
                 Next: {section.nextLabel}
               </button>

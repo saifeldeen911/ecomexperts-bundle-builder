@@ -1,8 +1,8 @@
 interface QuantityStepperProps {
   value: number
   label: string
-  onDecrement?: () => void
-  onIncrement?: () => void
+  onDecrement: () => void
+  onIncrement: () => void
   min?: number
   isDisabled?: boolean
 }
@@ -15,11 +15,11 @@ export function QuantityStepper({
   min = 0,
   isDisabled = false,
 }: QuantityStepperProps) {
-  const canDecrement = !isDisabled && value > min && onDecrement !== undefined
-  const canIncrement = !isDisabled && onIncrement !== undefined
+  const canDecrement = !isDisabled && value > min
+  const canIncrement = !isDisabled
 
   return (
-    <div className="quantity-stepper" aria-label={label}>
+    <div className="quantity-stepper" role="group" aria-label={label}>
       <button
         type="button"
         aria-label={`Decrease ${label}`}

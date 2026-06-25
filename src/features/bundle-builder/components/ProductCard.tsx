@@ -16,9 +16,9 @@ interface ProductCardProps {
   activeSelectionId: SelectionId
   quantity: number
   isSelected: boolean
-  onSelectVariant?: (target: BundleSelectionTarget) => void
-  onIncrementQuantity?: (target: BundleSelectionTarget) => void
-  onDecrementQuantity?: (target: BundleSelectionTarget) => void
+  onSelectVariant: (target: BundleSelectionTarget) => void
+  onIncrementQuantity: (target: BundleSelectionTarget) => void
+  onDecrementQuantity: (target: BundleSelectionTarget) => void
 }
 
 export function ProductCard({
@@ -31,12 +31,13 @@ export function ProductCard({
   onDecrementQuantity,
 }: ProductCardProps) {
   const compareAtPrice = formatCompareAtPrice(product.pricing)
-  const hasVariants = product.variants !== undefined && product.variants.length > 0
+  const variants = product.variants ?? []
+  const hasVariants = variants.length > 0
   const isQuantityEditable = isQuantityEditableProduct(product)
   const visibleSelectionId = hasVariants
     ? activeSelectionId
     : product.defaultSelectionId
-  const selectionTarget = {
+  const selectionTarget: BundleSelectionTarget = {
     productId: product.id,
     selectionId: visibleSelectionId,
   }
@@ -90,17 +91,14 @@ export function ProductCard({
 
         {hasVariants && (
           <VariantSelector
-            variants={product.variants ?? []}
+            variants={variants}
             activeVariantId={visibleSelectionId}
             productName={product.name}
-            onSelect={
-              onSelectVariant === undefined
-                ? undefined
-                : (variantId) =>
-                    onSelectVariant({
-                      productId: product.id,
-                      selectionId: variantId,
-                    })
+            onSelect={(variantId) =>
+              onSelectVariant({
+                productId: product.id,
+                selectionId: variantId,
+              })
             }
           />
         )}
@@ -113,16 +111,8 @@ export function ProductCard({
             <QuantityStepper
               value={quantity}
               label={`${product.name} quantity`}
-              onIncrement={
-                onIncrementQuantity === undefined
-                  ? undefined
-                  : () => onIncrementQuantity(selectionTarget)
-              }
-              onDecrement={
-                onDecrementQuantity === undefined
-                  ? undefined
-                  : () => onDecrementQuantity(selectionTarget)
-              }
+              onIncrement={() => onIncrementQuantity(selectionTarget)}
+              onDecrement={() => onDecrementQuantity(selectionTarget)}
               min={product.isRequired ? 1 : 0}
               isDisabled={product.isRequired === true}
             />

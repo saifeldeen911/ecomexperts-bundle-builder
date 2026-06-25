@@ -163,6 +163,10 @@
   opacity: 0;
 }
 
+.accordion-step__collapse[data-overflow-visible='true'] {
+  overflow: visible;
+}
+
 .accordion-step[data-open='true'] .accordion-step__collapse {
   grid-template-rows: 1fr;
   opacity: 1;
@@ -963,6 +967,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .accordion-step__collapse,
   .accordion-step__header,
   .accordion-step__next,
   .product-card,
@@ -971,6 +976,10 @@
   .review-panel__checkout,
   .review-panel__save {
     transition: none;
+  }
+
+  .accordion-step[data-open='true'] .accordion-step__collapse {
+    overflow: visible;
   }
 
   .accordion-step__header:active,

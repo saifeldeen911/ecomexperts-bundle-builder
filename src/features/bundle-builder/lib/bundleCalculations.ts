@@ -13,6 +13,11 @@ import type {
 } from '../types'
 import { isSingleSelectProduct } from './bundleProductRules'
 
+const currencyFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+})
+
 const normalizeSelectionQuantity = (
   product: BundleProduct,
   quantity: number,
@@ -175,10 +180,7 @@ export const calculateBundleTotals = (
 }
 
 export const formatCurrency = (cents: number) =>
-  new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  }).format(cents / 100)
+  currencyFormatter.format(cents / 100)
 
 export const formatPrice = (pricing: ProductPricing) => {
   const value = formatCurrency(pricing.activeCents)

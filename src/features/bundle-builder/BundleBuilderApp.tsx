@@ -23,6 +23,7 @@ import { ReviewPanel } from './components/ReviewPanel'
 import type {
   BundleSectionId,
   BundleSelectionTarget,
+  SaveConfigurationStatus,
 } from './types'
 
 const initialStateInput: BundleBuilderInitialStateInput = {
@@ -32,8 +33,6 @@ const initialStateInput: BundleBuilderInitialStateInput = {
 }
 
 const bundleBuilderReducer = createBundleBuilderReducer(bundleCatalog)
-
-type SaveConfigurationStatus = 'idle' | 'saved' | 'failed'
 
 const createHydratedInitialState = (input: BundleBuilderInitialStateInput) => {
   const fallbackState = createInitialBundleBuilderState(input)

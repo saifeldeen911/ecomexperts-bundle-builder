@@ -7,6 +7,7 @@ import type {
   BundleTotals,
   ReviewCategory,
   ReviewLine,
+  SaveConfigurationStatus,
   ShippingLine,
 } from '../types'
 import { ReviewLineItem } from './ReviewLineItem'
@@ -15,10 +16,10 @@ interface ReviewPanelProps {
   lines: ReviewLine[]
   shippingLine: ShippingLine
   totals: BundleTotals
-  onIncrementQuantity?: (target: BundleSelectionTarget) => void
-  onDecrementQuantity?: (target: BundleSelectionTarget) => void
-  onSaveConfiguration?: () => void
-  saveStatus?: 'idle' | 'saved' | 'failed'
+  onIncrementQuantity: (target: BundleSelectionTarget) => void
+  onDecrementQuantity: (target: BundleSelectionTarget) => void
+  onSaveConfiguration: () => void
+  saveStatus?: SaveConfigurationStatus
 }
 
 const reviewCategoryLabels: Record<ReviewCategory, string> = {
@@ -35,6 +36,14 @@ const reviewCategoryOrder: ReviewCategory[] = [
   'plan',
 ]
 
+const getReviewGroups = (lines: ReviewLine[]) =>
+  reviewCategoryOrder
+    .map((category) => ({
+      category,
+      lines: lines.filter((line) => line.category === category),
+    }))
+    .filter(({ lines }) => lines.length > 0)
+
 export function ReviewPanel({
   lines,
   shippingLine,
@@ -44,8 +53,9 @@ export function ReviewPanel({
   onSaveConfiguration,
   saveStatus = 'idle',
 }: ReviewPanelProps) {
+  const reviewGroups = getReviewGroups(lines)
   const handleCheckout = () => {
-    window.alert('Checkout is a prototype placeholder.')
+    window.alert('Your bundle is ready for checkout.')
   }
   const saveButtonLabel =
     saveStatus === 'saved'
@@ -67,13 +77,7 @@ export function ReviewPanel({
           </p>
 
           <div className="review-panel__groups">
-            {reviewCategoryOrder.map((category) => {
-              const categoryLines = lines.filter((line) => line.category === category)
-
-              if (categoryLines.length === 0) {
-                return null
-              }
-
+            {reviewGroups.map(({ category, lines: categoryLines }) => {
               return (
                 <section className="review-group" key={category}>
                   <h3>{reviewCategoryLabels[category]}</h3>

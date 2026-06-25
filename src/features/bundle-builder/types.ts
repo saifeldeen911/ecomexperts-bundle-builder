@@ -2,6 +2,8 @@ export type BundleSectionId = 'cameras' | 'plan' | 'sensors' | 'protection'
 
 export type ReviewCategory = 'cameras' | 'sensors' | 'accessories' | 'plan'
 
+export type SaveConfigurationStatus = 'idle' | 'saved' | 'failed'
+
 export type ProductId = string
 
 export type SelectionId = string
