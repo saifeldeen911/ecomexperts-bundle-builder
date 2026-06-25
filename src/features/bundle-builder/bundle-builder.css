@@ -1197,7 +1197,7 @@
   .review-panel {
     width: 100%;
     min-height: 658px;
-    height: 658px;
+    height: auto;
     border-radius: 10px;
     padding: 15px 0 0;
   }
@@ -1213,7 +1213,7 @@
     gap: 52px;
     width: calc(100% - 40px);
     max-width: 1173px;
-    height: 592px;
+    min-height: 592px;
     margin: 20px auto 31px;
   }
 
